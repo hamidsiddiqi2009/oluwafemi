@@ -288,8 +288,8 @@ const ChatWidget = () => {
       {/* Main chat area with side panel */}
       <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Online users side panel */}
-        <Box sx={{ width: 250, bgcolor: '#09a59a', borderRight: '1px solid #09a59a', p: 2, overflowY: 'auto' }}>
-          <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>Online Users</Typography>
+        <Box sx={{ width: 250, bgcolor: '#fff', borderRight: '1px solid #e0e0e0', p: 2, overflowY: 'auto' }}>
+          <Typography variant="h6" sx={{ mb: 2, color: '#09a59a' }}>Online Users</Typography>
           {onlineUsers.map((user, idx) => (
             <Box key={idx} sx={{ 
               display: 'flex', 
@@ -297,18 +297,20 @@ const ChatWidget = () => {
               p: 1, 
               mb: 1, 
               borderRadius: 2, 
-              bgcolor: '#3becb9',
-              boxShadow: 1
+              bgcolor: '#fff',
+              boxShadow: 2
             }}>
               <Box sx={{ 
-                width: 8, 
-                height: 8, 
+                width: 10, 
+                height: 10, 
                 borderRadius: '50%', 
-                bgcolor: '#09a59a', 
+                bgcolor: '#3becb9', // green dot for online
+                border: '2px solid #fff',
+                boxShadow: '0 0 0 2px #09a59a',
                 mr: 1 
               }} />
               <Typography variant="body2" sx={{ flex: 1, color: '#09a59a', fontWeight: 600 }}>{user.name}</Typography>
-              <Typography variant="caption" sx={{ color: '#fff' }}>Connected</Typography>
+              <Typography variant="caption" sx={{ color: '#bdbdbd' }}>Connected</Typography>
             </Box>
           ))}
           {onlineUsers.length === 0 && (
@@ -320,7 +322,7 @@ const ChatWidget = () => {
 
         {/* Chat area */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ p: 2, flex: 1, overflowY: 'auto', minHeight: 0, borderRadius: 4, boxShadow: 3, m: 2, bgcolor: '#3becb9' }}>
+          <Box sx={{ p: 2, flex: 1, overflowY: 'auto', minHeight: 0, borderRadius: 4, boxShadow: 3, m: 2, bgcolor: '#fff' }}>
             <Typography variant="h6" sx={{ color: '#09a59a', fontWeight: 700 }}>Chat</Typography>
             {email && (
               <Box sx={{ mb: 1 }}>
