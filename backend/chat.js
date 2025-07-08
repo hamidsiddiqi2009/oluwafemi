@@ -7,6 +7,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const { PDFDocument, rgb } = require('pdf-lib');
+const { loadSettings } = require('./index');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -177,11 +178,12 @@ router.post('/chat', async (req, res) => {
   });
 
   // Prepare messages for OpenAI
+  const settings = loadSettings();
   let systemPrompt = '';
   if (participant === 'Instructor Alex') {
-    systemPrompt = 'You are Instructor Alex, an AI instructor. Reply to the student in under 50 words.';
+    systemPrompt = settings.systemPromptInstructor;
   } else {
-    systemPrompt = `You are ${participant}, a classmate in an online class. Reply to the student in under 30 words.`;
+    systemPrompt = settings.systemPromptClassmate.replace('a classmate', `${participant}`);
   }
   const messages = [
     { role: 'system', content: systemPrompt },

@@ -6,6 +6,8 @@ const rateLimit = require('express-rate-limit');
 const { PDFDocument, rgb } = require('pdf-lib');
 const axios = require('axios');
 const chatRouter = require('./chat');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -480,8 +482,38 @@ app.post('/api/teachable/generate-progress-pdf', limiter, async (req, res) => {
   }
 });
 
+const SETTINGS_PATH = path.join(__dirname, 'settings.json');
+
+function loadSettings() {
+  if (!fs.existsSync(SETTINGS_PATH)) {
+    // Default settings
+    return {
+      systemPromptInstructor: 'You are Instructor Alex, an AI instructor. Reply to the student in under 50 words.',
+      systemPromptClassmate: 'You are a classmate in an online class. Reply to the student in under 30 words.'
+    };
+  }
+  return JSON.parse(fs.readFileSync(SETTINGS_PATH, 'utf-8'));
+}
+
+function saveSettings(settings) {
+  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2));
+}
+
+app.get('/api/admin/settings', (req, res) => {
+  res.json(loadSettings());
+});
+
+app.post('/api/admin/settings', (req, res) => {
+  const settings = req.body;
+  saveSettings(settings);
+  res.json({ success: true });
+});
+
 app.use('/api', chatRouter);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+module.exports.loadSettings = loadSettings;
+module.exports.saveSettings = saveSettings;
